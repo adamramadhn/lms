@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "501381974188",
+    "project_id": "bootcamp-lms",
+    "storage_bucket": "bootcamp-lms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501381974188:android:79f166e51c0b29a19bb709",
+        "android_client_info": {
+          "package_name": "com.example.lms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501381974188-iqiv4i0aluunok5rsekjmjdaq0j20oke.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABeVosEf4_DBOPmw9kfRelxFZbptMEGJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501381974188-iqiv4i0aluunok5rsekjmjdaq0j20oke.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
