@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/view/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
-
+  static String route = "login_page";
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -50,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             ButtonLogin(
               backgroundCOlor: Colors.white,
               borderColor: R.colors.primary,
-              onTap: () => Navigator.pushNamed(context, '/regis'),
+              onTap: () => Navigator.pushNamed(context, RegisterPage.route),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -71,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
             ButtonLogin(
               backgroundCOlor: Colors.black,
               borderColor: Colors.black,
-              onTap: () => Navigator.pushNamed(context, '/regis'),
+              onTap: () => Navigator.pushNamed(context, RegisterPage.route),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

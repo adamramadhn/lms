@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
 import 'package:lms/view/login_page.dart';
+import 'package:lms/view/main_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -32,14 +33,23 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: const Text(
-          "Yuk isi data diri!",
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w700, fontSize: 18),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 20),
+        child: AppBar(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: const Text(
+            "Yuk isi data diri!",
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w700, fontSize: 18),
+          ),
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -51,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
             onTap: () {
               // print(emailController.text);
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/main', (route) => false);
+                  context, MainPage.route, (route) => false);
             },
             child: Text(
               R.strings.daftar,

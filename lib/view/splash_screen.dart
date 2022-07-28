@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/view/login_page.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class SplashScreen extends StatelessWidget {
     Timer(
       const Duration(seconds: 5),
       () {
-        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, LoginPage.route, (route) => false);
       },
     );
     return Scaffold(

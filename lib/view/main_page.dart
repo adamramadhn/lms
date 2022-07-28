@@ -6,7 +6,7 @@ import 'package:lms/view/main/profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
-
+  static String route = "main_page";
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
           width: 30,
         ),
         onPressed: () {
-          Navigator.pushNamed(context, '/chat');
+          Navigator.pushNamed(context, ChatPage.route);
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -71,7 +71,7 @@ class _MainPageState extends State<MainPage> {
                       child: Column(
                         children: [
                           Image.asset(
-                            R.assets.imgHome,
+                            R.assets.icHome,
                             height: 20,
                           ),
                           const Text("Home")
