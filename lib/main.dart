@@ -3,6 +3,7 @@ import 'package:lms/constant/r.dart';
 import 'package:lms/view/login_page.dart';
 import 'package:lms/view/main/discuss/chat_page.dart';
 import 'package:lms/view/main/latihan_soal/mapel_page.dart';
+import 'package:lms/view/main/latihan_soal/paket_soal_page.dart';
 import 'package:lms/view/main_page.dart';
 import 'package:lms/view/register_page.dart';
 import 'package:lms/view/splash_screen.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         MainPage.route: (context) => const MainPage(),
         ChatPage.route: (context) => const ChatPage(),
         MapelPage.route: (context) => const MapelPage(),
+        PaketSoalPage.route: (context) => const PaketSoalPage(),
       },
     );
   }

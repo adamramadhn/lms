@@ -10,4 +10,6 @@ class Assets {
   String imgProfile = "assets/ic_avatar.png";
   String icAtom = "assets/ic_atom.png";
   String bannerHome = "assets/img_banner.png";
+
+  String icNote = "assets/ic_note.png";
 }

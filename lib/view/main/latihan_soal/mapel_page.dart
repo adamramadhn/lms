@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lms/view/main/latihan_soal/home_page.dart';
+import 'package:lms/view/main/latihan_soal/paket_soal_page.dart';
 
 class MapelPage extends StatelessWidget {
   const MapelPage({Key? key}) : super(key: key);
@@ -14,7 +15,11 @@ class MapelPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
         child: ListView.builder(
           itemBuilder: (context, index) {
-            return GestureDetector(onTap: () {}, child: const MapelWidget());
+            return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, PaketSoalPage.route);
+                },
+                child: const MapelWidget());
           },
           itemCount: 5,
         ),
