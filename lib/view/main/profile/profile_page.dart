@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/view/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -154,33 +157,43 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 13),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 7,
-                  color: Colors.black.withOpacity(0.25),
-                ),
-              ],
-            ),
-            child: Row(
-              children: const [
-                Icon(
-                  Icons.exit_to_app,
-                  color: Colors.red,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  "Title",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ],
+          GestureDetector(
+            onTap: () async {
+              await GoogleSignIn().signOut();
+              await FirebaseAuth.instance.signOut();
+              if (mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, LoginPage.route, (route) => false);
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 13),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 7,
+                    color: Colors.black.withOpacity(0.25),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: const [
+                  Icon(
+                    Icons.exit_to_app,
+                    color: Colors.red,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Keluar",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
             ),
           )
         ],

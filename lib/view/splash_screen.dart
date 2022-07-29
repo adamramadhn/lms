@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
 import 'package:lms/view/login_page.dart';
+import 'package:lms/view/main_page.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,7 +14,15 @@ class SplashScreen extends StatelessWidget {
     Timer(
       const Duration(seconds: 5),
       () {
-        Navigator.pushNamedAndRemoveUntil(context, LoginPage.route, (route) => false);
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          //TODO redirect to register or home
+          Navigator.pushNamedAndRemoveUntil(
+              context, MainPage.route, (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, LoginPage.route, (route) => false);
+        }
       },
     );
     return Scaffold(
