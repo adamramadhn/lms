@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/models/paket_soal_list.dart';
+
+import '../../../models/network_response.dart';
+import '../../../repository/latihan_soal_api.dart';
 
 class PaketSoalPage extends StatefulWidget {
-  const PaketSoalPage({Key? key}) : super(key: key);
+  const PaketSoalPage({Key? key, required this.id}) : super(key: key);
   static String route = "paket_soal_page";
+  final String id;
   @override
   State<PaketSoalPage> createState() => _PaketSoalPageState();
 }
 
 class _PaketSoalPageState extends State<PaketSoalPage> {
+  PaketSoalList? paketSoalList;
+  getPaketSoal() async {
+    final mapel = await LatihanSoalApi().getPaketSoal(widget.id);
+    if (mapel.status == Status.success) {
+      paketSoalList = PaketSoalList.fromJson(mapel.data!);
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPaketSoal();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,19 +49,43 @@ class _PaketSoalPageState extends State<PaketSoalPage> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Expanded(
-              child: GridView.count(
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 1,
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 2,
-                children: const [
-                  PaketSoalWidget(),
-                  PaketSoalWidget(),
-                  PaketSoalWidget(),
-                  PaketSoalWidget(),
-                ],
-              ),
-            ),
+                child: paketSoalList == null
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : SingleChildScrollView(
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: List.generate(paketSoalList!.data!.length,
+                              (index) {
+                            final currentPaketSoal =
+                                paketSoalList!.data![index];
+                            return Container(
+                              padding: const EdgeInsets.all(3),
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: PaketSoalWidget(
+                                data: currentPaketSoal,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      )
+
+                // GridView.count(
+                //     mainAxisSpacing: 10,
+                //     crossAxisSpacing: 1,
+                //     crossAxisCount: 2,
+                //     // childAspectRatio: 3 / 2,
+                //     // shrinkWrap: true,
+                //     children:
+                //         List.generate(paketSoalList!.data!.length, (index) {
+                //       final currentPaketSoal = paketSoalList!.data![index];
+                //       return PaketSoalWidget(
+                //         data: currentPaketSoal,
+                //       );
+                //     }).toList(),
+                //   ),
+                ),
           ],
         ),
       ),
@@ -51,8 +96,9 @@ class _PaketSoalPageState extends State<PaketSoalPage> {
 class PaketSoalWidget extends StatelessWidget {
   const PaketSoalWidget({
     Key? key,
+    required this.data,
   }) : super(key: key);
-
+  final PaketSoalData data;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,12 +125,12 @@ class PaketSoalWidget extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          const Text(
-            "Aljabar",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            data.exerciseTitle!,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
-            "0/0 Paket Soal",
+            "${data.jumlahDone}/${data.jumlahSoal} Paket Soal",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 9,

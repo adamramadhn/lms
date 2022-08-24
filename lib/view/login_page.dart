@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/helper/preference_helper.dart';
+import 'package:lms/models/network_response.dart';
+import 'package:lms/models/user_by_email.dart';
+import 'package:lms/view/main_page.dart';
 import 'package:lms/view/register_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../repository/auth_api.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -77,7 +83,16 @@ class _LoginPageState extends State<LoginPage> {
                 final user = FirebaseAuth.instance.currentUser;
                 if (mounted) {
                   if (user != null) {
-                    Navigator.pushNamed(context, RegisterPage.route);
+                    final dataUser = await AuthApi().getUserByEmail();
+                    if (dataUser.status == Status.success) {
+                      final data = UserByEmailResponse.fromJson(dataUser.data!);
+                      if (data.status == 1) {
+                       await PreferenceHelper().setUserData(data.data!);
+                        Navigator.pushNamed(context, MainPage.route);
+                      } else {
+                        Navigator.pushNamed(context, RegisterPage.route);
+                      }
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

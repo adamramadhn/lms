@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/helper/user_email.dart';
+import 'package:lms/models/network_response.dart';
+import 'package:lms/models/user_by_email.dart';
+import 'package:lms/repository/auth_api.dart';
 import 'package:lms/view/login_page.dart';
-import 'package:lms/view/main_page.dart';
+
+import '../helper/preference_helper.dart';
+import 'main_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -14,11 +20,13 @@ class RegisterPage extends StatefulWidget {
 enum Gender { lakilaki, perempuan }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String gender = "Laki-Laki";
   List<String> classSlta = ["10", "11", "12"];
+
+  String gender = "Laki-Laki";
   String selectedClass = "10";
   final emailController = TextEditingController();
-  // TextEditingController? emailController;
+  final schoolNameController = TextEditingController();
+  final fullNameController = TextEditingController();
 
   onTapGender(Gender genderInput) {
     if (genderInput == Gender.lakilaki) {
@@ -27,6 +35,19 @@ class _RegisterPageState extends State<RegisterPage> {
       gender = "Perempuan";
     }
     setState(() {});
+  }
+
+  initDataUser() {
+    emailController.text = UserEmail.getUserEmail()!;
+    fullNameController.text = UserEmail.getUserDisplayName()!;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initDataUser();
   }
 
   @override
@@ -58,10 +79,39 @@ class _RegisterPageState extends State<RegisterPage> {
           child: ButtonLogin(
             backgroundCOlor: R.colors.primary,
             borderColor: R.colors.primary,
-            onTap: () {
-              // print(emailController.text);
-              Navigator.pushNamedAndRemoveUntil(
-                  context, MainPage.route, (route) => false);
+            onTap: () async {
+              final json = {
+                "email": emailController.text,
+                "nama_lengkap": fullNameController.text,
+                "nama_sekolah": schoolNameController.text,
+                "kelas": selectedClass,
+                "gender": gender,
+                "foto": UserEmail.getUserPhotoUrl(),
+              };
+              // print(json);
+              final result = await AuthApi().postRegister(json);
+              if (result.status == Status.success) {
+                final registerResult =
+                    UserByEmailResponse.fromJson(result.data!);
+                if (registerResult.status == 1) {
+                  await PreferenceHelper().setUserData(registerResult.data!);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, MainPage.route, (route) => false);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(registerResult.message!),
+                    ),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text("Terjadi Kesalahan, Silahkan ulangi kembali!"),
+                  ),
+                );
+              }
             },
             child: Text(
               R.strings.daftar,
@@ -83,9 +133,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 title: 'Email',
                 hintText: 'Email Anda',
                 controller: emailController,
+                enable: false,
               ),
-              const RegisterTextField(
-                  title: 'Nama Lengkap', hintText: 'Nama Lengkap Anda'),
+              RegisterTextField(
+                title: 'Nama Lengkap',
+                hintText: 'Nama Lengkap Anda',
+                controller: fullNameController,
+              ),
               const SizedBox(
                 height: 5,
               ),
@@ -188,8 +242,11 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 5,
               ),
-              const RegisterTextField(
-                  title: "Nama Sekolah", hintText: "Nama Sekolah"),
+              RegisterTextField(
+                title: "Nama Sekolah",
+                hintText: "Nama Sekolah",
+                controller: schoolNameController,
+              ),
             ],
           ),
         ),
@@ -200,11 +257,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
 class RegisterTextField extends StatelessWidget {
   const RegisterTextField(
-      {Key? key, required this.title, required this.hintText, this.controller})
+      {Key? key,
+      required this.title,
+      required this.hintText,
+      this.controller,
+      this.enable = true})
       : super(key: key);
   final String title;
   final String hintText;
   final TextEditingController? controller;
+  final bool enable;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -225,6 +287,7 @@ class RegisterTextField extends StatelessWidget {
             border: Border.all(color: R.colors.greyBorder),
           ),
           child: TextField(
+            enabled: enable,
             controller: controller,
             decoration: InputDecoration(
               border: InputBorder.none,
