@@ -12,11 +12,18 @@ import '../models/user_by_email.dart';
 import '../repository/auth_api.dart';
 import 'register_page.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     Timer(
       const Duration(seconds: 2),
       () async {
@@ -27,9 +34,11 @@ class SplashScreen extends StatelessWidget {
             final data = UserByEmailResponse.fromJson(dataUser.data!);
             if (data.status == 1) {
               await PreferenceHelper().setUserData(data.data!);
-              Navigator.pushNamedAndRemoveUntil(context, MainPage.route, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, MainPage.route, (route) => false);
             } else {
-              Navigator.pushNamedAndRemoveUntil(context, RegisterPage.route, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, RegisterPage.route, (route) => false);
             }
           }
         } else {
@@ -37,6 +46,10 @@ class SplashScreen extends StatelessWidget {
         }
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: R.colors.primary,
       body: Center(

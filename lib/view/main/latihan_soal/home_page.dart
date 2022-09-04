@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lms/constant/r.dart';
@@ -46,7 +47,29 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getMapel();
     getBanner();
+    setupFcm();
     // getUserData1();
+  }
+
+  setupFcm() async {
+    final tokenFcm = await FirebaseMessaging.instance.getToken();
+    print("token Fcm : $tokenFcm");
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    // if (initialMessage != null) {
+    //   _handleMessage(initialMessage);
+    // }
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
   }
 
   @override
