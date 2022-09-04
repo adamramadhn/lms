@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lms/constant/r.dart';
 import 'package:lms/view/login_page.dart';
 import 'package:lms/view/main/discuss/chat_page.dart';
+import 'package:lms/view/main/profile/edit_profile_page.dart';
 import 'package:lms/view/main/profile/profile_page.dart';
 import 'package:lms/view/main_page.dart';
 import 'package:lms/view/register_page.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         // MapelPage.route: (context) => const MapelPage(),
         // PaketSoalPage.route: (context) => const PaketSoalPage(),
         ProfilePage.route: (context) => const ProfilePage(),
+        EditProfilePage.route: (context) => const EditProfilePage(),
       },
     );
   }

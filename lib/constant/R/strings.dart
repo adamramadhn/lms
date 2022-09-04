@@ -5,4 +5,5 @@ class Strings {
   String loginWithApple = "Masuk dengan Apple";
   String loginWithGoogle = "Masuk dengan Google";
   String daftar = "DAFTAR";
+  String perbaharuiAkun = "Perbaharui Akun";
 }
