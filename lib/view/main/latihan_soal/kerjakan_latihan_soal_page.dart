@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:lms/constant/r.dart';
+import 'package:lms/helper/user_email.dart';
 import 'package:lms/models/kerjakan_soal_list.dart';
 import 'package:lms/models/network_response.dart';
 import 'package:lms/repository/latihan_soal_api.dart';
+import 'package:lms/view/main/latihan_soal/result_page.dart';
 
 class KerjakanLatihanSoalPage extends StatefulWidget {
   const KerjakanLatihanSoalPage({Key? key, required this.id}) : super(key: key);
@@ -62,6 +64,8 @@ class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
                   onPressed: () async {
                     if (_controller!.index == soalList!.data!.length - 1) {
                       final result = await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
                         context: context,
                         builder: (context) {
                           return const BottomSheetConfirmation();
@@ -69,7 +73,37 @@ class _KerjakanLatihanSoalPageState extends State<KerjakanLatihanSoalPage>
                       );
                       // print(result);
                       if (result == true) {
-                        // print("Kirim ke BE");
+                        List<String> answer = [];
+                        List<String> questionId = [];
+
+                        for (var value in soalList!.data!) {
+                          questionId.add(value.bankQuestionId!);
+                          answer.add(value.studentAnswer!);
+                        }
+                        final payLoad = {
+                          "user_email": UserEmail.getUserEmail(),
+                          "exercise_id": widget.id,
+                          "bank_question_id": questionId,
+                          "student_answer": answer,
+                        };
+                        final result =
+                            await LatihanSoalApi().postStudentAnswer(payLoad);
+                        if (result.status == Status.success) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                  exerciseId: widget.id,
+                                ),
+                              ));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Submit gagal. Silahkan ulangi"),
+                            ),
+                          );
+                        }
+                        // print(payLoad);
                       } else {
                         // print("Cancel");
                       }
@@ -226,7 +260,15 @@ class _BottomSheetConfirmationState extends State<BottomSheetConfirmation> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+      ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 100,
